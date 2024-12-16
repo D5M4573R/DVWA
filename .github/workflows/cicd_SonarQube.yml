@@ -32,7 +32,6 @@ jobs:
           -Dsonar.organization=my-org
           -Dsonar.projectKey=dvwa-php-app
           -Dsonar.sources=.
-          -Dsonar.exclusions=**/tests/**
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
