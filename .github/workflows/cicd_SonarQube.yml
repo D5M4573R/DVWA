@@ -1,0 +1,38 @@
+name: CI/CD Workflow for DVWA (PHP) with SonarQube Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'  # Use latest PHP version as per DVWA's requirements
+
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y php php-cli php-mbstring unzip curl
+
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      with:
+        projectBaseDir: .
+        args: >
+          -Dsonar.organization=my-org
+          -Dsonar.projectKey=dvwa-php-app
+          -Dsonar.sources=.
+          -Dsonar.exclusions=**/tests/**
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
